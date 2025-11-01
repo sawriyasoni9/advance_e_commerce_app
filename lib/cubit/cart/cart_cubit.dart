@@ -13,10 +13,10 @@ class CartCubit extends Cubit<CartState> with HydratedMixin {
     final existing = updatedCart.indexWhere((e) => e.id == product.id);
 
     if (existing == -1) {
+      product.quantity = product.quantity ?? 1;
       updatedCart.add(product);
     } else {
-      // Optional: handle duplicates (e.g., increase quantity)
-      // For now, do nothing if item already exists
+      updatedCart[existing].quantity = (updatedCart[existing].quantity ?? 1) + 1;
     }
 
     emit(CartSuccessState(cartItems: updatedCart));
@@ -39,7 +39,11 @@ class CartCubit extends Cubit<CartState> with HydratedMixin {
   double get totalPrice {
     return state.cartItems.fold(
       0.0,
-      (sum, item) => sum + (double.tryParse(item.price ?? '0') ?? 0),
+      (sum, item) {
+        final price = double.tryParse(item.price ?? '0') ?? 0;
+        final quantity = item.quantity ?? 1;
+        return sum + (price * quantity);
+      },
     );
   }
 
@@ -69,19 +73,41 @@ class CartCubit extends Cubit<CartState> with HydratedMixin {
     final updatedCart = List<MDLProduct>.from(state.cartItems);
     final index = updatedCart.indexWhere((e) => e.id == product.id);
     if (index != -1) {
-      updatedCart[index].quantity = (updatedCart[index].quantity ?? 1) + 1;
+      final productToUpdate = MDLProduct(
+        id: updatedCart[index].id,
+        title: updatedCart[index].title,
+        price: updatedCart[index].price,
+        description: updatedCart[index].description,
+        category: updatedCart[index].category,
+        image: updatedCart[index].image,
+        rating: updatedCart[index].rating,
+        quantity: (updatedCart[index].quantity ?? 1) + 1,
+      );
+      updatedCart[index] = productToUpdate;
       emit(CartSuccessState(cartItems: updatedCart));
     }
   }
 
-  /// Decrease quantity (min 1)
+  /// Decrease quantity (min 1, or remove if reaches 0)
   void decreaseQuantity(MDLProduct product) {
     final updatedCart = List<MDLProduct>.from(state.cartItems);
     final index = updatedCart.indexWhere((e) => e.id == product.id);
     if (index != -1) {
-      final newQty = (updatedCart[index].quantity ?? 1) - 1;
-      if (newQty > 0) {
-        updatedCart[index].quantity = newQty;
+      final currentQuantity = updatedCart[index].quantity ?? 1;
+      final newQuantity = currentQuantity - 1;
+      
+      if (newQuantity > 0) {
+        final productToUpdate = MDLProduct(
+          id: updatedCart[index].id,
+          title: updatedCart[index].title,
+          price: updatedCart[index].price,
+          description: updatedCart[index].description,
+          category: updatedCart[index].category,
+          image: updatedCart[index].image,
+          rating: updatedCart[index].rating,
+          quantity: newQuantity,
+        );
+        updatedCart[index] = productToUpdate;
       } else {
         updatedCart.removeAt(index);
       }

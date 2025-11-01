@@ -16,10 +16,16 @@ class ProductRepository extends AppRepositoryContract {
     _apiClient = ApiClient(dio);
   }
 
-  Future<ResponseWrapper<List<MDLProduct>?>> product() async {
+  Future<ResponseWrapper<List<MDLProduct>?>> product({
+    int? limit,
+    int? offset,
+  }) async {
     var responseWrapper = ResponseWrapper<List<MDLProduct>>();
     try {
-      var response = await _apiClient.product();
+      var response = await _apiClient.product(
+        limit: limit,
+        offset: offset,
+      );
 
       if (response.response.statusCode == 200) {
         List<MDLProduct>? products = [];

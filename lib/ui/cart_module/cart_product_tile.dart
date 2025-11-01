@@ -19,6 +19,8 @@ class CartItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double itemPrice = double.tryParse(item.price ?? '0') ?? 0;
+    final int quantity = item.quantity ?? 1;
+    final double totalItemPrice = itemPrice * quantity;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -68,11 +70,22 @@ class CartItemTile extends StatelessWidget {
                 Text(
                   "\$${itemPrice.toStringAsFixed(2)}",
                   style: const TextStyle(
-                    fontSize: 15,
-                    color: Colors.teal,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
+                if (quantity > 1) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    "Total: \$${totalItemPrice.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.teal,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 8),
               ],
             ),
@@ -89,7 +102,7 @@ class CartItemTile extends StatelessWidget {
                     onPressed: onDecrease,
                   ),
                   Text(
-                    '1',
+                    '${item.quantity ?? 1}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

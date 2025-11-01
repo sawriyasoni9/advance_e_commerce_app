@@ -6,6 +6,8 @@ final class ProductInitialState extends ProductState {}
 
 final class ProductLoadingState extends ProductState {}
 
+final class ProductLoadingMoreState extends ProductState {}
+
 final class ProductSuccessState extends ProductState {}
 final class ProductDetailsSuccessState extends ProductState {
   MDLProduct productDetails;

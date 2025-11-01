@@ -22,7 +22,10 @@ abstract class ApiClient {
   }
 
   @GET(Apis.product)
-  Future<HttpResponse> product();
+  Future<HttpResponse> product({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+  });
 
   @GET(Apis.viewProduct)
   Future<HttpResponse> productDetails(@Path("id") productId);

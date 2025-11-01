@@ -59,16 +59,15 @@ class CartScreen extends StatelessWidget {
                               },
                               child: CartItemTile(
                                 item: item,
-                                onIncrease:
-                                    () => cartCubit.increaseQuantity(item),
-                                onDecrease:
-                                    () => context
-                                        .read<CartCubit>()
-                                        .decreaseQuantity(item),
-                                onRemove:
-                                    () => context
-                                        .read<CartCubit>()
-                                        .removeFromCart(item),
+                                onIncrease: () {
+                                  cartCubit.increaseQuantity(item);
+                                },
+                                onDecrease: () {
+                                  cartCubit.decreaseQuantity(item);
+                                },
+                                onRemove: () {
+                                  cartCubit.removeFromCart(item);
+                                },
                               ),
                             );
                           },
@@ -76,7 +75,7 @@ class CartScreen extends StatelessWidget {
                       ),
                       _placeOrderWidget(
                         totalPrice: cartCubit.totalPrice,
-                        totalItems: items.length,
+                        totalItems: items.fold(0, (sum, item) => sum + (item.quantity ?? 1)),
                       ),
                     ],
                   ),
@@ -122,7 +121,7 @@ Widget _placeOrderWidget({
               ),
             ),
             Text(
-              totalPrice.toString(),
+              '\$${totalPrice.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
