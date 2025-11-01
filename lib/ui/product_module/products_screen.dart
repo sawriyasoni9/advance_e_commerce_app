@@ -227,10 +227,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     onTap: () {
                       navigateWithAnimation(
                         context: context,
-                        page: ProductDetailsScreen(
-                          productDetailCubit: ProductDetailCubit(
-                            repository: ProductRepository(),
-                            productId: product.id.toString(),
+                        page: BlocProvider.value(
+                          value: cartCubit,
+                          child: ProductDetailsScreen(
+                            productDetailCubit: ProductDetailCubit(
+                              repository: ProductRepository(),
+                              productId: product.id.toString(),
+                            ),
                           ),
                         ),
                       );

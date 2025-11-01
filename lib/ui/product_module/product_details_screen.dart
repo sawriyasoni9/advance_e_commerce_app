@@ -1,13 +1,18 @@
+import 'package:advance_e_commerce_app/cubit/cart/cart_cubit.dart';
+import 'package:advance_e_commerce_app/cubit/cart/cart_state.dart';
 import 'package:advance_e_commerce_app/cubit/product_detail/product_detail_cubit.dart';
 import 'package:advance_e_commerce_app/cubit/product_detail/product_detail_state.dart';
 import 'package:advance_e_commerce_app/entities/product/mdl_product.dart';
 import 'package:advance_e_commerce_app/extensions/app_loader.dart';
+import 'package:advance_e_commerce_app/extensions/navigation_with_animation.dart' show navigateWithAnimation;
 import 'package:advance_e_commerce_app/extensions/string_extension.dart';
+import 'package:advance_e_commerce_app/ui/cart_module/cart_screen.dart';
 import 'package:advance_e_commerce_app/ui/common/custom_network_image.dart';
 import 'package:advance_e_commerce_app/ui/common/full_page_error.dart';
 import 'package:advance_e_commerce_app/ui/common/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final ProductDetailCubit productDetailCubit;
@@ -147,11 +152,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           productInfo.description ?? '',
           style: const TextStyle(fontSize: 16, height: 1.4),
         ),
-        SizedBox(height: 10),
-        PrimaryButton(
-          backgroundColor: Colors.red,
-          title: 'Add to cart',
-          onTap: () {},
+        SizedBox(height: 20),
+        // Add to Cart Button
+        BlocBuilder<CartCubit, CartState>(
+          builder: (context, cartState) {
+            final cartCubit = context.read<CartCubit>();
+            final isInCart = cartCubit.isInCart(productInfo);
+
+            return PrimaryButton(
+              backgroundColor: isInCart ? Colors.red : Colors.teal,
+              title: isInCart ? 'Remove from cart' : 'Add to cart',
+              onTap: () {
+                if (isInCart) {
+                  cartCubit.removeFromCart(productInfo);
+                  Fluttertoast.showToast(msg: "Removed from cart");
+                } else {
+                  cartCubit.addToCart(productInfo);
+                  Fluttertoast.showToast(msg: "Added to cart");
+                  navigateWithAnimation(
+                    context: context,
+                    page: BlocProvider.value(
+                      value: cartCubit, // Reuse the existing cubit
+                      child: const CartScreen(),
+                    ),
+                  );
+                }
+              },
+            );
+          },
         ),
       ],
     );

@@ -49,10 +49,13 @@ class CartScreen extends StatelessWidget {
                               onTap: () {
                                 navigateWithAnimation(
                                   context: context,
-                                  page: ProductDetailsScreen(
-                                    productDetailCubit: ProductDetailCubit(
-                                      repository: ProductRepository(),
-                                      productId: item.id.toString(),
+                                  page: BlocProvider.value(
+                                    value: cartCubit,
+                                    child: ProductDetailsScreen(
+                                      productDetailCubit: ProductDetailCubit(
+                                        repository: ProductRepository(),
+                                        productId: item.id.toString(),
+                                      ),
                                     ),
                                   ),
                                 );
