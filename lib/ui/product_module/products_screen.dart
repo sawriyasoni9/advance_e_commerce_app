@@ -80,7 +80,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
         ),
         body: Column(
           children: [
-            // ✅ Always show banner at top
             BlocBuilder<ProductCubit, ProductState>(
               bloc: widget.productCubit,
               buildWhen:
@@ -90,7 +89,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 if (state is ProductInternetStatusChanged) {
                   return InternetStatusBanner(status: state.internetStatus);
                 }
-                Fluttertoast.showToast(msg: 'Online');
                 return SizedBox.shrink();
               },
             ),
