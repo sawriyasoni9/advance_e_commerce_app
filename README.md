@@ -13,6 +13,7 @@ This e-commerce application provides users with an intuitive interface to:
 - Manage a shopping cart with add/remove/quantity management
 - Monitor internet connectivity status
 - Persist cart data across app restarts
+- Dark and light theme support
 
 ## ✨ Features
 
@@ -63,6 +64,10 @@ The application follows **Clean Architecture** principles with clear separation 
     - Reactive UI updates
 
 ## 📦 Dependencies & Their Purposes
+
+#### `shared_preferences: ^2.2.2`
+
+- **Purpose**: Dark theme light theme preference storage
 
 ### State Management
 

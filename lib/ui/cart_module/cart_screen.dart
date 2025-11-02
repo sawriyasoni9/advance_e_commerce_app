@@ -23,11 +23,7 @@ class CartScreen extends StatelessWidget {
           appBar: AppBar(
             title: const Text(
               "My Cart",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
             ),
           ),
           body:
@@ -78,7 +74,10 @@ class CartScreen extends StatelessWidget {
                       ),
                       _placeOrderWidget(
                         totalPrice: cartCubit.totalPrice,
-                        totalItems: items.fold(0, (sum, item) => sum + (item.quantity ?? 1)),
+                        totalItems: items.fold(
+                          0,
+                          (sum, item) => sum + (item.quantity ?? 1),
+                        ),
                       ),
                     ],
                   ),

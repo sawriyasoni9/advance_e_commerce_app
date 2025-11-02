@@ -47,6 +47,7 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.4.1
   pull_to_refresh: ^2.0.0
+  shared_preferences: ^2.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

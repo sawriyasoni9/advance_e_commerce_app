@@ -4,7 +4,8 @@ import 'package:advance_e_commerce_app/cubit/product_detail/product_detail_cubit
 import 'package:advance_e_commerce_app/cubit/product_detail/product_detail_state.dart';
 import 'package:advance_e_commerce_app/entities/product/mdl_product.dart';
 import 'package:advance_e_commerce_app/extensions/app_loader.dart';
-import 'package:advance_e_commerce_app/extensions/navigation_with_animation.dart' show navigateWithAnimation;
+import 'package:advance_e_commerce_app/extensions/navigation_with_animation.dart'
+    show navigateWithAnimation;
 import 'package:advance_e_commerce_app/extensions/string_extension.dart';
 import 'package:advance_e_commerce_app/ui/cart_module/cart_screen.dart';
 import 'package:advance_e_commerce_app/ui/common/custom_network_image.dart';
@@ -45,7 +46,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           'Product Details',
           style: TextStyle(
             fontSize: 24,
-            color: Colors.black,
             fontWeight: FontWeight.w500,
           ),
         ),

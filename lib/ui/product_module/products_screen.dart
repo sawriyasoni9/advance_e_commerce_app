@@ -3,6 +3,7 @@ import 'package:advance_e_commerce_app/cubit/cart/cart_state.dart';
 import 'package:advance_e_commerce_app/cubit/product_cubit.dart';
 import 'package:advance_e_commerce_app/cubit/product_detail/product_detail_cubit.dart';
 import 'package:advance_e_commerce_app/cubit/product_state.dart';
+import 'package:advance_e_commerce_app/cubit/theme/theme_cubit.dart';
 import 'package:advance_e_commerce_app/extensions/app_loader.dart';
 import 'package:advance_e_commerce_app/extensions/navigation_with_animation.dart';
 import 'package:advance_e_commerce_app/repository/provider/lrf/product_repository.dart';
@@ -15,6 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../cubit/theme/theme_state.dart';
+
 class ProductsScreen extends StatefulWidget {
   final ProductCubit productCubit;
 
@@ -26,7 +29,9 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   late CartCubit cartCubit;
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
 
   @override
   void initState() {
@@ -50,18 +55,31 @@ class _ProductsScreenState extends State<ProductsScreen> {
       value: cartCubit,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Products',
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           ),
           centerTitle: true,
           actions: [
+            // Theme Toggle Button
+            BlocBuilder<ThemeCubit, ThemeState>(
+              builder: (context, themeState) {
+                final themeCubit = context.read<ThemeCubit>();
+                final isDark = themeState.themeMode == ThemeMode.dark;
+
+                return IconButton(
+                  onPressed: () {
+                    themeCubit.toggleTheme();
+                  },
+                  icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+                  tooltip:
+                      isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+                );
+              },
+            ),
+            // Cart Button
             Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 8),
               child: IconButton(
                 onPressed: () async {
                   navigateWithAnimation(
@@ -73,6 +91,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   );
                 },
                 icon: Icon(Icons.shopping_cart),
+                tooltip: 'View Cart',
               ),
             ),
           ],
@@ -114,7 +133,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           if (state is ProductErrorState) {
             Fluttertoast.showToast(msg: state.errorMessage);
           }
-          
+
           // Complete refresh controller
           if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
@@ -182,7 +201,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       child: Center(child: Text("No more products")),
                     );
                   }
-                  
+
                   Widget body;
                   if (mode == LoadStatus.idle) {
                     body = const Text("Pull up to load more");
@@ -195,10 +214,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   } else {
                     body = const Text("No more products");
                   }
-                  return SizedBox(
-                    height: 55.0,
-                    child: Center(child: body),
-                  );
+                  return SizedBox(height: 55.0, child: Center(child: body));
                 },
               ),
               child: GridView.builder(

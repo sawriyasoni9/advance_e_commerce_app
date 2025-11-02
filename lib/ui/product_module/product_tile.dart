@@ -62,6 +62,7 @@ class ProductCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -86,7 +87,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: onAddToCart,
-                        child: Icon(Icons.shopping_cart),
+                        child: Icon(Icons.shopping_cart, color: Colors.black),
                       ),
                     ],
                   ),
